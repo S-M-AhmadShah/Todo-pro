@@ -1,5 +1,5 @@
 /* ============================= */
-/* GLOBAL RESET & BASE STYLES */
+/* GLOBAL RESET */
 /* ============================= */
 
 * {
@@ -7,8 +7,13 @@
 }
 
 html {
-    overflow: hidden;
     height: 100%;
+    overflow: hidden;
+    scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
 }
 
 body {
@@ -19,21 +24,21 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
     position: relative;
     overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
+    color: #fff;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
 /* ============================= */
-/* BACKGROUND VIDEO & OVERLAY */
+/* BACKGROUND VIDEO */
 /* ============================= */
 
 #bgVideo {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -52,17 +57,17 @@ body::before {
 
 
 /* ============================= */
-/* MAIN CARD (RESPONSIVE CONTAINER) */
+/* MAIN CONTAINER */
 /* ============================= */
 
 .container {
     width: min(100%, 1050px);
-    max-height: 90vh; /* Viewport height constraint to avoid vertical overflow */
+    max-height: 92vh;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Internal scrolling if device screen height is small */
+    overflow-y: auto;
     color: #fff;
-    padding: clamp(16px, 3vw, 28px);
+    padding: 28px;
     border-radius: 20px;
     position: relative;
     z-index: 1;
@@ -72,18 +77,12 @@ body::before {
     -webkit-backdrop-filter: blur(15px);
 
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+
+    scrollbar-width: none;
 }
 
-/* Custom Scrollbar */
-.container::-webkit-scrollbar,
-#taskList::-webkit-scrollbar {
-    width: 6px;
-}
-
-.container::-webkit-scrollbar-thumb,
-#taskList::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+.container::-webkit-scrollbar {
+    display: none;
 }
 
 
@@ -93,14 +92,23 @@ body::before {
 
 h1 {
     text-align: center;
-    margin: 0 0 20px 0;
+    margin: 0 0 25px;
     color: #cf3636;
     font-size: clamp(22px, 4vw, 32px);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.mobile-only-title {
+    display: none;
+}
+
+.desktop-only-title {
+    display: block;
 }
 
 
 /* ============================= */
-/* MAIN LAYOUT (DESKTOP & TV FIRST) */
+/* MAIN LAYOUT */
 /* ============================= */
 
 .main-layout {
@@ -111,7 +119,7 @@ h1 {
     width: 100%;
 }
 
-.left-panel, 
+.left-panel,
 .right-panel {
     min-width: 0;
     width: 100%;
@@ -119,14 +127,23 @@ h1 {
 
 
 /* ============================= */
-/* FORM INPUTS & GROUPS */
+/* MOBILE SUB CARDS BASE */
+/* ============================= */
+
+.sub-card {
+    min-width: 0;
+}
+
+
+/* ============================= */
+/* INPUT FORM */
 /* ============================= */
 
 .input-group {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    align-items: stretch;
+    width: 100%;
 }
 
 .field {
@@ -136,62 +153,52 @@ h1 {
     width: 100%;
 }
 
-.field label {
-    min-width: 70px;
-    font-size: 14px;
-    color: white;
-}
-
-input, 
+input,
 select {
     width: 100%;
+    min-width: 0;
     padding: 12px;
     border: 2px solid #eee;
     border-radius: 8px;
     outline: none;
-    transition: 0.3s;
-    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
     font-size: 14px;
+    font-family: inherit;
+}
+
+input:focus,
+select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.15);
 }
 
 select {
     cursor: pointer;
 }
 
-input:focus, 
-select:focus {
-    border-color: #667eea;
-}
-
-.input-group .field:first-child input,
-.priority-field select {
-    flex: 1;
+.date-category-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
     width: 100%;
 }
 
 .due-date-group,
 .category-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    margin-top: 0;
-    color: white;
-}
-
-.due-date-group label,
-.category-group label {
-    font-size: 14px;
+    width: 100%;
+    min-width: 0;
 }
 
 #dueDate,
 #category {
     width: 100%;
-    padding: 9px;
+    padding: 10px;
     border-radius: 8px;
-    border: none;
+    border: 2px solid #eee;
     outline: none;
-    box-sizing: border-box;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
 }
 
 
@@ -206,13 +213,19 @@ button {
     color: white;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.3s;
+    transition: background 0.25s, transform 0.2s;
     font-size: 14px;
+    font-family: inherit;
+    touch-action: manipulation;
 }
 
 button:hover {
     background: #5563d6;
     transform: translateY(-1px);
+}
+
+button:active {
+    transform: scale(0.98);
 }
 
 #addBtn {
@@ -222,77 +235,79 @@ button:hover {
 
 
 /* ============================= */
-/* SEARCH & TASK LIST */
+/* SEARCH */
 /* ============================= */
 
 #searchInput {
     width: 100%;
-    margin-top: 0;
-    box-sizing: border-box;
+    margin: 0;
 }
 
+
+/* ============================= */
+/* TASK LIST */
+/* ============================= */
+
 #taskList {
-    padding-left: 0;
-    margin: 10px 0 0 0;
+    padding: 0;
+    margin: 10px 0 0;
     list-style: none;
     max-height: clamp(200px, 35vh, 320px);
     overflow-y: auto;
+    scrollbar-width: none;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
+#taskList::-webkit-scrollbar {
+    display: none;
+}
+
+
+/* ============================= */
 /* TASK ITEM */
-li {
+/* ============================= */
+
+#taskList li {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-top: 10px;
     padding: 8px 12px;
     width: 100%;
+    min-width: 0;
+
     border-radius: 10px;
     color: #fff;
+
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
     border: 2px solid rgba(255, 255, 255, 0.18);
     transition: 0.3s;
-    box-sizing: border-box;
+
+    overflow: hidden;
 }
 
-li:hover {
+#taskList li:hover {
     background: linear-gradient(135deg, #774ba2, #667eea);
 }
 
-li span {
-    flex: 1;
-    min-width: 0;
+#taskList li.dragging {
+    opacity: 0.45;
+}
+
+
+/* ============================= */
+/* TASK TEXT */
+/* ============================= */
+
+#taskList li > span {
+    flex: 1 1 auto;
+    min-width: 60px;
     word-break: break-word;
     overflow-wrap: anywhere;
-    max-height: 80px;
-    overflow-y: auto;
-}
-
-li input[type="checkbox"] {
-    appearance: none;
-    width: 22px;
-    height: 22px;
-    border: 2px solid #667eea;
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    transition: 0.3s;
-    flex-shrink: 0;
-}
-
-li input[type="checkbox"]:checked {
-    background: #667eea;
-    transform: scale(1.1);
-}
-
-li input[type="checkbox"]:checked::after {
-    content: "✔";
-    color: white;
-    position: absolute;
-    top: 2px;
-    left: 6px;
-    font-size: 14px;
 }
 
 .completed span {
@@ -300,40 +315,97 @@ li input[type="checkbox"]:checked::after {
     opacity: 0.6;
 }
 
+
+/* ============================= */
+/* CHECKBOX */
+/* ============================= */
+
+li input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 22px;
+    min-width: 22px;
+    height: 22px;
+
+    padding: 0;
+    margin: 0;
+
+    border: 2px solid #667eea;
+    border-radius: 50%;
+
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+li input[type="checkbox"]:checked {
+    background: #667eea;
+    transform: scale(1.05);
+}
+
+li input[type="checkbox"]:checked::after {
+    content: "✔";
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -52%);
+    font-size: 13px;
+}
+
+
+/* ============================= */
+/* TASK BUTTONS */
+/* ============================= */
+
 li button {
     flex-shrink: 0;
     padding: 6px 10px;
     border-radius: 6px;
-    margin-left: auto;
+    margin-left: 0;
 }
 
-li button:last-child {
-    background: #777;
-}
-
-li button:last-child:hover {
-    background: #555;
-}
-
-li button:first-of-type {
+li button.delete-btn {
     background: #ff4d4d;
 }
 
-li button:first-of-type:hover {
+li button.delete-btn:hover {
     background: #e60000;
 }
 
-li input[type="text"] {
-    padding: 6px;
-    border-radius: 6px;
+.favorite-btn {
+    background: transparent !important;
+    font-size: 18px;
+    padding: 4px 6px;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.favorite-btn:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    transform: scale(1.15);
+}
+
+.edit-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 7px;
     border: none;
     outline: none;
-    min-width: 0;
+    border-radius: 6px;
 }
+
+
+/* ============================= */
+/* EMPTY MESSAGE */
+/* ============================= */
 
 #emptyMessage {
     text-align: center;
     padding: 20px 10px;
+    margin: 0;
     color: white;
     opacity: 0.8;
     font-size: 14px;
@@ -342,7 +414,60 @@ li input[type="text"] {
 
 
 /* ============================= */
-/* DARK MODE & CONTROLS */
+/* PRIORITY */
+/* ============================= */
+
+.low {
+    border-left: 5px solid #2ecc71 !important;
+}
+
+.medium {
+    border-left: 5px solid #f1c40f !important;
+}
+
+.high {
+    border-left: 5px solid #e74c3c !important;
+}
+
+
+/* ============================= */
+/* DATE & CATEGORY */
+/* ============================= */
+
+.due-date {
+    font-size: 11px;
+    white-space: nowrap;
+    opacity: 0.85;
+    flex-shrink: 0;
+}
+
+.due-date.overdue {
+    color: #ff4d4d;
+    font-weight: bold;
+}
+
+.due-date.today {
+    color: #00ff88;
+    font-weight: bold;
+}
+
+.due-date.upcoming {
+    color: #ffd43b;
+    font-weight: bold;
+}
+
+.category-tag {
+    font-size: 11px;
+    padding: 3px 7px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.15);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+
+/* ============================= */
+/* DARK MODE */
 /* ============================= */
 
 #toggleMode {
@@ -365,7 +490,7 @@ body.dark .container {
 
 
 /* ============================= */
-/* FILTERS SECTION */
+/* FILTERS */
 /* ============================= */
 
 .filters {
@@ -375,7 +500,6 @@ body.dark .container {
     align-items: center;
     gap: 8px;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .filters button {
@@ -398,7 +522,7 @@ body.dark .container {
 
 
 /* ============================= */
-/* EXTRA SECTION */
+/* EXTRA */
 /* ============================= */
 
 .extra {
@@ -406,6 +530,7 @@ body.dark .container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
 }
 
 #taskCount {
@@ -425,30 +550,8 @@ body.dark .container {
 
 
 /* ============================= */
-/* PRIORITY & TAGS */
+/* UNDO */
 /* ============================= */
-
-.low { border-left: 5px solid #2ecc71; }
-.medium { border-left: 5px solid #f1c40f; }
-.high { border-left: 5px solid #e74c3c; }
-
-.due-date {
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0.85;
-}
-
-.due-date.overdue { color: #ff4d4d; font-weight: bold; }
-.due-date.today { color: #00ff88; font-weight: bold; }
-.due-date.upcoming { color: #ffd43b; font-weight: bold; }
-
-.category-tag {
-    font-size: 11px;
-    padding: 3px 7px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    white-space: nowrap;
-}
 
 .undo-box {
     margin-top: 15px;
@@ -456,34 +559,30 @@ body.dark .container {
     background: #222;
     color: white;
     border-radius: 8px;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 10px;
+
+    position: relative;
+    z-index: 3;
 }
 
-.undo-box button { background: #2ecc71; padding: 6px 10px; }
-.undo-box button:hover { background: #27ae60; }
-
-.favorite-btn {
-    background: transparent !important;
-    font-size: 18px;
-    padding: 4px 6px;
-    border: none;
-    cursor: pointer;
+.undo-box button {
+    background: #2ecc71;
+    padding: 6px 10px;
 }
 
-.favorite-btn:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
-    transform: scale(1.15);
+.undo-box button:hover {
+    background: #27ae60;
 }
 
 
-/* ========================================================================== */
-/* COMPREHENSIVE MEDIA QUERIES FOR ALL SCREEN SIZES */
-/* ========================================================================== */
+/* ============================= */
+/* LARGE SCREENS */
+/* ============================= */
 
-/* 1. ULTRA-WIDE SCREENS & 4K/8K TV / LCD / LED (Large Display Panels) */
 @media (min-width: 1400px) {
     .container {
         width: 1100px;
@@ -494,66 +593,153 @@ body.dark .container {
         font-size: 34px;
     }
 
-    input, select, button {
+    input,
+    select,
+    button {
         font-size: 15px;
         padding: 13px;
     }
 }
 
-/* 2. LAPTOP & DESKTOP (Standard Screens) */
+
+/* ============================= */
+/* LAPTOP / DESKTOP */
+/* ============================= */
+
 @media (min-width: 769px) and (max-width: 1399px) {
     .container {
         width: min(1000px, 92vw);
     }
 }
 
-/* 3. TABLETS & SMALL LAPTOPS (iPad, Android Tabs) */
+
+/* ============================= */
+/* TABLET */
+/* ============================= */
+
 @media (max-width: 768px) {
+
+    html {
+        height: auto;
+        min-height: 100%;
+        overflow-y: auto;
+    }
+
     body {
-        padding: 12px;
+        min-height: 100vh;
+        height: auto;
+        padding: 15px 10px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .desktop-only-title {
+        display: none;
+    }
+
+    .mobile-only-title {
+        display: block;
+        text-align: center;
+        margin: 10px 0 15px;
+        color: #cf3636;
+        font-size: 26px;
+        z-index: 2;
     }
 
     .container {
         width: 100%;
-        max-height: 94vh;
-        padding: 20px;
+        max-height: none;
+        height: auto;
+        padding: 0;
+        overflow: visible;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
     }
 
     .main-layout {
         grid-template-columns: 1fr;
-        gap: 18px;
+        gap: 0;
+    }
+
+    .sub-card {
+        width: 100%;
+        padding: 18px;
+        margin-bottom: 15px;
+
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+
+        border-radius: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    }
+
+    body.dark .sub-card {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    .date-category-wrapper {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 
     #taskList {
-        max-height: 220px;
+        max-height: 280px;
+    }
+
+    #taskList li {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .right-panel #searchInput {
+        margin-bottom: 8px;
     }
 }
 
-/* 4. MOBILE SCREENS (Smartphones, Small Displays) */
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
 @media (max-width: 500px) {
+
     body {
-        padding: 8px;
+        padding: 8px 8px 25px;
     }
 
-    .container {
+    .mobile-only-title {
+        font-size: 23px;
+        margin: 8px 0 12px;
+    }
+
+    .sub-card {
         padding: 16px 12px;
-        border-radius: 16px;
+        border-radius: 15px;
     }
 
-    h1 {
-        font-size: 22px;
-        margin-bottom: 15px;
+    .left-panel .input-group {
+        gap: 10px;
     }
 
-    .field {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 4px;
-    }
-
-    .field label {
-        min-width: auto;
+    .left-panel input,
+    .left-panel select {
+        padding: 10px;
         font-size: 13px;
+    }
+
+    #addBtn {
+        padding: 11px;
+        font-size: 14px;
+        font-weight: bold;
     }
 
     .filters {
@@ -569,7 +755,6 @@ body.dark .container {
 
     .extra {
         flex-direction: column;
-        gap: 10px;
         align-items: stretch;
         text-align: center;
     }
@@ -577,334 +762,73 @@ body.dark .container {
     #clearCompleted {
         width: 100%;
     }
+
+    #taskList li {
+        gap: 5px;
+    }
+
+    .category-tag,
+    .due-date {
+        font-size: 10px;
+    }
+
+    li button {
+        padding: 5px 7px;
+        font-size: 11px;
+    }
 }
 
-/* 5. EXTRA SMALL / FOLDABLE MOBILE SCREENS (e.g., Galaxy Fold outer screen, 320px) */
+
+/* ============================= */
+/* EXTRA SMALL PHONES */
+/* ============================= */
+
 @media (max-width: 360px) {
-    .container {
-        padding: 10px 8px;
+
+    body {
+        padding-left: 6px;
+        padding-right: 6px;
     }
 
-    .filters button {
-        flex: 1 1 100%; /* Stacks filter buttons vertically on tiny screens */
+    .sub-card {
+        padding: 12px 8px;
     }
 
-    input, select, button {
+    .mobile-only-title {
+        font-size: 21px;
+    }
+
+    input,
+    select,
+    button {
         padding: 8px;
         font-size: 12px;
     }
-}
-/* ============================= */
-/* TITLE VISIBILITY CONTROL */
-/* ============================= */
 
-/* Normal (Desktop/Badi screens) par Card ke bahar wala Title Hide rahega */
-.mobile-only-title {
-    display: none;
-}
-
-/* Card ke andar wala Title general styling */
-.desktop-only-title {
-    display: block;
-    text-align: center;
-    margin: 0 0 25px 0;
-    color: #cf3636;
-}
-
-/* ============================= */
-/* MOBILE & SMALL SCREENS (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    /* Body flex-direction ko column karein taake heading card ke uper aaye */
-    body {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+    .filters button {
+        flex: 1 1 100%;
     }
 
-    /* Card ke andar wale Title ko hide karein */
-    .desktop-only-title {
+    #taskList li {
+        padding: 7px;
+    }
+
+    .category-tag,
+    .due-date {
         display: none;
     }
-
-    /* Card ke bahar wale Title ko display karein */
-    .mobile-only-title {
-        display: block;
-        text-align: center;
-        margin-bottom: 15px;
-        color: #cf3636;
-        font-size: 26px;
-        z-index: 2; /* Ensure it stays above background */
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-}
-/* ============================= */
-/* DATE + CATEGORY GRID FIX */
-/* ============================= */
-
-/* Mobile & Desktop Dono ke liye base wrapper */
-.date-category-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Desktop/Big screens par side-by-side 2 equal columns */
-    gap: 12px;
-    width: 100%;
-    margin-top: 5px;
-    box-sizing: border-box;
-}
-
-/* Date aur Category Groups */
-.due-date-group,
-.category-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    width: 100%;
-    color: white;
-}
-
-#dueDate,
-#category {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #eee;
-    outline: none;
-    box-sizing: border-box;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    transition: 0.3s;
-}
-
-#dueDate:focus,
-#category:focus {
-    border-color: #667eea;
 }
 
 
 /* ============================= */
-/* SMALL SCREENS FIX (<= 500px) */
+/* REDUCE MOTION */
 /* ============================= */
 
-@media (max-width: 500px) {
-    /* Chhoti screens par Date aur Category ek dusre ke niche aa jayenge */
-    .date-category-wrapper {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-}
-/* ============================= */
-/* TITLE VISIBILITY CONTROL */
-/* ============================= */
-
-.mobile-only-title {
-    display: none;
-}
-
-.desktop-only-title {
-    display: block;
-    text-align: center;
-    margin: 0 0 25px 0;
-    color: #cf3636;
-}
-
-
-/* ============================= */
-/* DESKTOP / BIG SCREENS DEFAULT */
-/* ============================= */
-
-.container {
-    width: min(100%, 1050px);
-    max-height: 92vh;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    color: #fff;
-    padding: 28px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-}
-
-/* ============================= */
-/* SMALL SCREENS ONLY (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    body {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        overflow-y: auto; /* Small screens par body scroll enable */
-        padding: 15px 10px;
-    }
-
-    /* Main Container background desktop style se remove kar ke cards par shift kar diya */
-    .container {
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-height: none;
-        overflow-y: visible;
-    }
-
-    .desktop-only-title {
-        display: none;
-    }
-
-    .mobile-only-title {
-        display: block;
-        text-align: center;
-        margin: 10px 0 15px 0;
-        color: #cf3636;
-        font-size: 26px;
-        z-index: 2;
-    }
-
-    /* 3 SEPARATE CARDS STYLING FOR MOBILE */
-    .sub-card {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-radius: 16px;
-        padding: 18px;
-        margin-bottom: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-sizing: border-box;
-    }
-
-    /* Dark Mode Support for Sub Cards */
-    body.dark .sub-card {
-        background: rgba(0, 0, 0, 0.6);
-    }
-}
-/* ============================= */
-/* NO SCROLLBAR BUT TOUCH SCROLL ENABLER */
-/* ============================= */
-
-/* Pure Webpage se visual Scrollbar hide karne ke liye */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-.container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-html, body, .container {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-
-/* ============================= */
-/* SMALL SCREENS SCROLL FIX (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    html {
-        overflow-y: auto !important; /* Touch scroll allow karega */
-        height: auto;
-    }
-
-    body {
-        min-height: 100vh;
-        height: auto;
-        overflow-y: auto !important; /* Vertical scroll enable */
-        -webkit-overflow-scrolling: touch; /* iOS / Android smooth touch scrolling */
-        padding: 15px 10px 30px 10px; /* Extra bottom space for comfortable scroll */
-    }
-
-    /* Outer Container ki height restriction khatam taake 3 cards natural height le sakein */
-    .container {
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-    }
-
-    /* Task List ke andar agar lambi list ho to uski scrollbar bhi hide rahegi */
-    #taskList::-webkit-scrollbar {
-        display: none;
-    }
-    
-    #taskList {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-}
-/* ============================= */
-/* MOBILE SPECIFIC CARD ADJUSTMENTS */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    /* CARD 1: INPUT FORM ADJUSTMENTS */
-    .left-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .left-panel .input-group {
-        gap: 10px;
-    }
-
-    .left-panel input, 
-    .left-panel select {
-        padding: 10px;
-        font-size: 13px;
-        border-radius: 8px;
-    }
-
-    .left-panel .date-category-wrapper {
-        grid-template-columns: 1fr; /* Mobile par Date aur Category vertical block mein clean align honge */
-        gap: 8px;
-    }
-
-    .left-panel #addBtn {
-        padding: 11px;
-        font-size: 14px;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-
-
-    /* CARD 2: SEARCH & TASK LIST ADJUSTMENTS */
-    .right-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .right-panel #searchInput {
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .right-panel #taskList {
-        max-height: 280px; /* Touch scroll ke saath list aasani se render hogi */
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch; /* Smooth iOS/Android finger scroll */
-        padding-right: 2px;
-    }
-
-    /* Task list items Mobile styling */
-    .right-panel li {
-        padding: 8px 10px;
-        font-size: 13px;
-        gap:6px;
-        margin-top: 8px;
-    }
-
-    .right-panel li button {
-        padding: 5px 8px;
-        font-size: 11px;
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
     }
 }
