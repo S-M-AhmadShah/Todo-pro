@@ -1,97 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo Pro</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Pro</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- BACKGROUND VIDEO -->
-    <video autoplay muted loop playsinline id="bgVideo">
-        <source src="background.mp4" type="video/mp4">
-    </video>
+    <!-- BACKGROUND VIDEO -->
+    <video autoplay muted loop playsinline id="bgVideo">
+        <source src="background.mp4" type="video/mp4">
+    </video>
 
-    <!-- MOBILE HEADING (Card ke bahar) -->
-    <h1 class="main-title mobile-only-title">Todo Pro 🚀</h1>
+    <!-- MOBILE HEADING (Card ke bahar) -->
+    <h1 class="main-title mobile-only-title">Todo Pro 🚀</h1>
 
-    <!-- MAIN APP CONTAINER -->
-    <div class="container">
+    <!-- MAIN APP CONTAINER -->
+    <div class="container">
 
-        <!-- DESKTOP HEADING -->
-        <h1 class="main-title desktop-only-title">Todo Pro 🚀</h1>
+        <!-- DESKTOP HEADING -->
+        <h1 class="main-title desktop-only-title">Todo Pro 🚀</h1>
 
-        <!-- MAIN LAYOUT -->
-        <div class="main-layout">
+        <!-- MAIN LAYOUT -->
+        <div class="main-layout">
 
-            <!-- CARD 1: INPUT FORM (Task, Priority, Date, Category, Add Button) -->
-            <div class="left-panel sub-card">
-                <div class="input-group">
-                    <div class="field">
-                        <input type="text" id="taskInput" placeholder="Add a new task...">
-                    </div>
+            <!-- CARD 1: INPUT FORM (Task, Priority, Date, Category, Add Button) -->
+            <div class="left-panel sub-card">
+                <div class="input-group">
+                    <div class="field">
+                        <input type="text" id="taskInput" placeholder="Add a new task...">
+                    </div>
 
-                    <div class="field priority-field">
+                    <div class="field priority-field">
                         <select id="priority">
-                            <option value="low" selected>Low Priority</option>
-                            <option value="medium">Medium Priority</option>
-                            <option value="high">High Priority</option>
+                            <option value="" disabled selected>Select Priority</option>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
                         </select>
-                    </div>
+                    </div>
 
-                    <div class="date-category-wrapper">
-                        <div class="due-date-group">
-                            <input type="date" id="dueDate">
-                        </div>
+                    <div class="date-category-wrapper">
+                        <div class="due-date-group">
+                            <input type="date" id="dueDate">
+                        </div>
 
-                        <div class="category-group">
-                            <select id="category">
-                                <option value="personal">🏠 Personal</option>
-                                <option value="study">📚 Study</option>
-                                <option value="work">💼 Work</option>
-                                <option value="important">⭐ Important</option>
-                            </select>
-                        </div>
-                    </div>
+                        <div class="category-group">
+                            <select id="category">
+                                <option value="personal">🏠 Personal</option>
+                                <option value="study">📚 Study</option>
+                                <option value="work">💼 Work</option>
+                                <option value="important">⭐ Important</option>
+                            </select>
+                        </div>
+                    </div>
 
-                    <button id="addBtn" type="button">Add</button>
-                </div>
-            </div>
+                    <button id="addBtn" type="button">Add</button>
+                </div>
+            </div>
 
-            <!-- CARD 2: SEARCH & TASK LIST -->
-            <div class="right-panel sub-card">
-                <input type="text" id="searchInput" placeholder="Search task...">
-                <ul id="taskList"></ul>
-                <p id="emptyMessage">📝 No tasks found. Add a new task to get started!</p>
-            </div>
+            <!-- CARD 2: SEARCH & TASK LIST -->
+            <div class="right-panel sub-card">
+                <input type="text" id="searchInput" placeholder="Search task...">
+                <ul id="taskList"></ul>
+                <p id="emptyMessage">📝 No tasks found. Add a new task to get started!</p>
+            </div>
 
-        </div>
+        </div>
 
-        <!-- CARD 3: CONTROLS & FILTERS (Dark Mode, Filters, Extra Info) -->
-        <div class="bottom-controls-card sub-card">
-            <!-- DARK MODE -->
-            <button id="toggleMode" type="button">🌙 Dark Mode</button>
+        <!-- CARD 3: CONTROLS & FILTERS (Dark Mode, Filters, Extra Info) -->
+        <div class="bottom-controls-card sub-card">
+            <!-- DARK MODE -->
+            <button id="toggleMode" type="button">🌙 Dark Mode</button>
 
-            <!-- FILTERS -->
-            <div class="filters">
-                <button id="allBtn" type="button">All</button>
-                <button id="activeBtn" type="button">Active</button>
-                <button id="completedBtn" type="button">Completed</button>
-                <button id="favoritesBtn" type="button">⭐ Favorites</button>
-            </div>
+            <!-- FILTERS -->
+            <div class="filters">
+                <button id="allBtn" type="button">All</button>
+                <button id="activeBtn" type="button">Active</button>
+                <button id="completedBtn" type="button">Completed</button>
+                <button id="favoritesBtn" type="button">⭐ Favorites</button>
+            </div>
 
-            <!-- EXTRA -->
-            <div class="extra">
-                <span id="taskCount">0 tasks</span>
-                <button id="clearCompleted" type="button">Clear Completed</button>
-            </div>
-        </div>
+            <!-- EXTRA -->
+            <div class="extra">
+                <span id="taskCount">0 tasks</span>
+                <button id="clearCompleted" type="button">Clear Completed</button>
+            </div>
+        </div>
 
-    </div>
+    </div>
 
-    <script src="script.js"></script>
+    <script src="script.js"></script>
 
 </body>
 </html>
