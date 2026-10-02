@@ -89,7 +89,8 @@ function createTask(taskObj) {
     }
 
     // Toggle Task Status
-    checkbox.onchange = () => {
+    checkbox.onchange = (e) => {
+        e.stopPropagation();
         taskObj.completed = checkbox.checked;
         saveTasks();
         renderTasks(currentFilter);
@@ -100,7 +101,8 @@ function createTask(taskObj) {
     favoriteBtn.innerText = taskObj.favorite ? "⭐" : "☆";
     favoriteBtn.classList.add("favorite-btn");
 
-    favoriteBtn.onclick = () => {
+    favoriteBtn.onclick = (e) => {
+        e.stopPropagation(); // Stop desktop drag interference
         taskObj.favorite = !taskObj.favorite;
         saveTasks();
         renderTasks(currentFilter);
@@ -110,7 +112,8 @@ function createTask(taskObj) {
     const del = document.createElement("button");
     del.innerText = "X";
 
-    del.onclick = () => {
+    del.onclick = (e) => {
+        e.stopPropagation(); // Stop desktop drag interference
         const actualIndex = tasks.findIndex(t => t.id === taskObj.id);
         if (actualIndex > -1) {
             const deletedTask = tasks[actualIndex];
@@ -122,7 +125,8 @@ function createTask(taskObj) {
     };
 
     // Inline Editing
-    span.onclick = () => {
+    span.onclick = (e) => {
+        e.stopPropagation();
         if (categoryTag) categoryTag.style.display = "none";
         if (dateText) dateText.style.display = "none";
         favoriteBtn.style.display = "none";
@@ -143,7 +147,8 @@ function createTask(taskObj) {
         li.append(saveBtn, cancelBtn);
         input.focus();
 
-        const handleSave = () => {
+        const handleSave = (evt) => {
+            if (evt) evt.stopPropagation();
             const newText = input.value.trim();
             if (newText !== "") {
                 taskObj.text = newText;
@@ -155,11 +160,14 @@ function createTask(taskObj) {
         saveBtn.onclick = handleSave;
 
         input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") handleSave();
+            if (e.key === "Enter") handleSave(e);
             if (e.key === "Escape") renderTasks(currentFilter);
         });
 
-        cancelBtn.onclick = () => renderTasks(currentFilter);
+        cancelBtn.onclick = (evt) => {
+            evt.stopPropagation();
+            renderTasks(currentFilter);
+        };
     };
 
     // Construct DOM Hierarchy
@@ -168,8 +176,16 @@ function createTask(taskObj) {
     if (dateText) li.append(dateText);
     li.append(favoriteBtn, del);
 
-    // Drag-and-Drop Handlers
-    li.ondragstart = () => li.classList.add("dragging");
+    // Desktop Drag-and-Drop Conflict Fix
+    li.ondragstart = (e) => {
+        // Stop drag if clicking buttons, inputs or tags
+        if (["BUTTON", "INPUT", "SMALL"].includes(e.target.tagName)) {
+            e.preventDefault();
+            return false;
+        }
+        li.classList.add("dragging");
+    };
+
     li.ondragend = () => {
         li.classList.remove("dragging");
         updateOrder();
@@ -337,7 +353,6 @@ toggleMode.onclick = () => {
 /* ========================================================================== */
 
 function showUndo(deletedTask, originalIndex) {
-    // Existing undo boxes ko remove karen taake cluttering na ho
     const existingUndo = document.querySelector(".undo-box");
     if (existingUndo) existingUndo.remove();
 
@@ -356,10 +371,10 @@ function showUndo(deletedTask, originalIndex) {
         undoBox.remove();
     }, 5000);
 
-    undoButton.onclick = () => {
+    undoButton.onclick = (e) => {
+        e.stopPropagation();
         clearTimeout(undoTimer);
         
-        // Target index check karke insert karen
         const insertIndex = originalIndex > tasks.length ? tasks.length : originalIndex;
         tasks.splice(insertIndex, 0, deletedTask);
 
