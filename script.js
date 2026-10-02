@@ -24,11 +24,7 @@ function createTask(taskObj, index) {
     let li = document.createElement("li");
     li.dataset.id = taskObj.id;
     li.draggable = true;
-
-    // FIX 1: Blank priority string error fix
-    if (taskObj.priority) {
-        li.classList.add(taskObj.priority);
-    }
+    li.classList.add(taskObj.priority);
 
     let checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -104,6 +100,7 @@ function createTask(taskObj, index) {
 
     // INLINE EDIT
     span.onclick = () => {
+        // 1. ایڈٹ موڈ میں تمام 4 اضافی چیزیں (Category, Due Date, Favorite, Delete) چھپا دیں
         if (categoryTag) categoryTag.style.display = "none";
         if (dateText) dateText.style.display = "none";
         favoriteBtn.style.display = "none";
@@ -173,16 +170,18 @@ function updateOrder() {
     });
 
     let visibleIds = visibleTasks.map(t => t.id);
+
     let hiddenTasks = tasks.filter(t => !visibleIds.includes(t.id));
 
     tasks = [...visibleTasks, ...hiddenTasks];
+
     saveTasks();
 }
 
 /* RENDER */
 function renderTasks(filter = "all") {
     currentFilter = filter;
-    document.querySelectorAll(".filters button").forEach(button => {
+        document.querySelectorAll(".filters button").forEach(button => {
         button.classList.remove("active");
     });
 
@@ -211,28 +210,30 @@ function renderTasks(filter = "all") {
     taskCount.innerText =
         `${activeTasks} tasks left • ${completedTasks} completed • ${totalTasks} total`;
 
-    // EMPTY STATE
-    if (taskList.children.length === 0) {
-        emptyMessage.style.display = "block";
+            // EMPTY STATE
+        if (taskList.children.length === 0) 
+        {
+                emptyMessage.style.display = "block";
 
-        if (search !== "") {
-            emptyMessage.innerText = "🔍 No matching tasks found";
-        } else if (filter === "active") {
-            emptyMessage.innerText = "🎉 No active tasks!";
-        } else if (filter === "completed") {
-            emptyMessage.innerText = "📝 No completed tasks yet";
-        } else if (filter === "favorites") {
-            emptyMessage.innerText = "⭐ No favorite tasks yet";
+                if (search !== "") {
+                    emptyMessage.innerText = "🔍 No matching tasks found";
+                } else if (filter === "active") {
+                    emptyMessage.innerText = "🎉 No active tasks!";
+                } else if (filter === "completed") {
+                    emptyMessage.innerText = "📝 No completed tasks yet";
+                } else if (filter === "favorites") {
+                    emptyMessage.innerText = "⭐ No favorite tasks yet";
+                } else {
+                    emptyMessage.innerText = "📝 No tasks found. Add a new task to get started!";
+                }
+
         } else {
-            emptyMessage.innerText = "📝 No tasks found. Add a new task to get started!";
+            emptyMessage.style.display = "none";
         }
-    } else {
-        emptyMessage.style.display = "none";
-    }
 }
-
 /* ADD */
 addBtn.onclick = () => {
+
     let text = taskInput.value.trim();
 
     if (text === "") {
@@ -252,17 +253,17 @@ addBtn.onclick = () => {
     saveTasks();
     renderTasks(currentFilter);
 
-    // Form inputs reset
     taskInput.value = "";
     dueDateInput.value = "";
-    priority.value = ""; // FIX 2: Priority Reset back to default option
 };
 
 /* ENTER KEY */
 taskInput.addEventListener("keydown", (event) => {
+
     if (event.key === "Enter") {
         addBtn.click();
     }
+
 });
 
 /* FILTERS */
@@ -282,14 +283,18 @@ clearCompletedBtn.onclick = () => {
 searchInput.oninput = () => renderTasks(currentFilter);
 
 /* DARK MODE */
+
+// Load saved mode
 let darkMode = localStorage.getItem("darkMode");
 
 if (darkMode === "enabled") {
     document.body.classList.add("dark");
-    toggleMode.innerText = "☀️️ Light Mode";
+    toggleMode.innerText = "☀️ Light Mode";
 }
 
+// Toggle mode
 toggleMode.onclick = () => {
+
     document.body.classList.toggle("dark");
 
     if (document.body.classList.contains("dark")) {
@@ -307,27 +312,33 @@ function saveTasks() {
 }
 
 function showUndo(deletedTask, index) {
-    let undoBox = document.createElement("div");
 
-    undoBox.innerHTML = `
-        <span>🗑️ Task deleted</span>
-        <button>Undo</button>
-    `;
+        let undoBox = document.createElement("div");
 
-    undoBox.className = "undo-box";
-    document.querySelector(".container").appendChild(undoBox);
+        undoBox.innerHTML = `
+            <span>🗑️ Task deleted</span>
+            <button>Undo</button>
+        `;
 
-    let undoButton = undoBox.querySelector("button");
+        undoBox.className = "undo-box";
 
-    let undoTimer = setTimeout(() => {
-        undoBox.remove();
-    }, 5000);
+        document.querySelector(".container").appendChild(undoBox);
 
-    undoButton.onclick = () => {
-        clearTimeout(undoTimer);
-        tasks.splice(index, 0, deletedTask);
-        saveTasks();
-        renderTasks(currentFilter);
-        undoBox.remove();
-    };
+        let undoButton = undoBox.querySelector("button");
+
+        let undoTimer = setTimeout(() => {
+            undoBox.remove();
+        }, 5000);
+
+        undoButton.onclick = () => {
+
+            clearTimeout(undoTimer);
+
+            tasks.splice(index, 0, deletedTask);
+
+            saveTasks();
+            renderTasks(currentFilter);
+
+            undoBox.remove();
+        };
 }
