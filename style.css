@@ -1,14 +1,14 @@
-/* ============================= */
-/* GLOBAL RESET & BASE STYLES */
-/* ============================= */
+/* ========================================================================== */
+/* 1. GLOBAL RESET & BASE STYLES */
+/* ========================================================================== */
 
 * {
     box-sizing: border-box;
 }
 
 html {
-    overflow: hidden;
     height: 100%;
+    overflow-y: auto;
 }
 
 body {
@@ -20,15 +20,27 @@ body {
     min-height: 100vh;
     margin: 0;
     position: relative;
-    overflow: hidden;
+    overflow-x: hidden;
     padding: 20px;
-    box-sizing: border-box;
+}
+
+/* Hide scrollbars visually while maintaining full touch/mouse scrollability */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.container::-webkit-scrollbar,
+#taskList::-webkit-scrollbar {
+    display: none;
+}
+
+html, body, .container, #taskList {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 
-/* ============================= */
-/* BACKGROUND VIDEO & OVERLAY */
-/* ============================= */
+/* ========================================================================== */
+/* 2. BACKGROUND VIDEO & OVERLAY */
+/* ========================================================================== */
 
 #bgVideo {
     position: fixed;
@@ -51,16 +63,16 @@ body::before {
 }
 
 
-/* ============================= */
-/* MAIN CARD (RESPONSIVE CONTAINER) */
-/* ============================= */
+/* ========================================================================== */
+/* 3. MAIN CARD CONTAINER (DESKTOP DEFAULT) */
+/* ========================================================================== */
 
 .container {
     width: min(100%, 1050px);
-    max-height: 90vh; /* Viewport height constraint to avoid vertical overflow */
+    max-height: 92vh;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Internal scrolling if device screen height is small */
+    overflow-y: auto;
     color: #fff;
     padding: clamp(16px, 3vw, 28px);
     border-radius: 20px;
@@ -74,22 +86,10 @@ body::before {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-/* Custom Scrollbar */
-.container::-webkit-scrollbar,
-#taskList::-webkit-scrollbar {
-    width: 6px;
-}
 
-.container::-webkit-scrollbar-thumb,
-#taskList::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-}
-
-
-/* ============================= */
-/* TITLE */
-/* ============================= */
+/* ========================================================================== */
+/* 4. TITLES & HEADINGS */
+/* ========================================================================== */
 
 h1 {
     text-align: center;
@@ -98,10 +98,21 @@ h1 {
     font-size: clamp(22px, 4vw, 32px);
 }
 
+.desktop-only-title {
+    display: block;
+    text-align: center;
+    margin: 0 0 25px 0;
+    color: #cf3636;
+}
 
-/* ============================= */
-/* MAIN LAYOUT (DESKTOP & TV FIRST) */
-/* ============================= */
+.mobile-only-title {
+    display: none;
+}
+
+
+/* ========================================================================== */
+/* 5. MAIN LAYOUT (PANELS) */
+/* ========================================================================== */
 
 .main-layout {
     display: grid;
@@ -111,16 +122,16 @@ h1 {
     width: 100%;
 }
 
-.left-panel, 
+.left-panel,
 .right-panel {
     min-width: 0;
     width: 100%;
 }
 
 
-/* ============================= */
-/* FORM INPUTS & GROUPS */
-/* ============================= */
+/* ========================================================================== */
+/* 6. FORM INPUTS & GROUPS */
+/* ========================================================================== */
 
 .input-group {
     display: flex;
@@ -142,7 +153,7 @@ h1 {
     color: white;
 }
 
-input, 
+input,
 select {
     width: 100%;
     padding: 12px;
@@ -158,7 +169,7 @@ select {
     cursor: pointer;
 }
 
-input:focus, 
+input:focus,
 select:focus {
     border-color: #667eea;
 }
@@ -169,13 +180,22 @@ select:focus {
     width: 100%;
 }
 
+/* Date + Category Grid Wrapper */
+.date-category-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    width: 100%;
+    margin-top: 5px;
+}
+
 .due-date-group,
 .category-group {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
-    margin-top: 0;
+    width: 100%;
     color: white;
 }
 
@@ -187,17 +207,25 @@ select:focus {
 #dueDate,
 #category {
     width: 100%;
-    padding: 9px;
+    padding: 10px;
     border-radius: 8px;
-    border: none;
+    border: 2px solid #eee;
     outline: none;
-    box-sizing: border-box;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #333;
+    transition: 0.3s;
+}
+
+#dueDate:focus,
+#category:focus {
+    border-color: #667eea;
 }
 
 
-/* ============================= */
-/* BUTTONS */
-/* ============================= */
+/* ========================================================================== */
+/* 7. BUTTONS */
+/* ========================================================================== */
 
 button {
     padding: 12px 15px;
@@ -221,14 +249,13 @@ button:hover {
 }
 
 
-/* ============================= */
-/* SEARCH & TASK LIST */
-/* ============================= */
+/* ========================================================================== */
+/* 8. SEARCH & TASK LIST */
+/* ========================================================================== */
 
 #searchInput {
     width: 100%;
     margin-top: 0;
-    box-sizing: border-box;
 }
 
 #taskList {
@@ -239,7 +266,7 @@ button:hover {
     overflow-y: auto;
 }
 
-/* TASK ITEM */
+/* Task Item */
 li {
     display: flex;
     align-items: center;
@@ -253,7 +280,6 @@ li {
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.18);
     transition: 0.3s;
-    box-sizing: border-box;
 }
 
 li:hover {
@@ -341,32 +367,9 @@ li input[type="text"] {
 }
 
 
-/* ============================= */
-/* DARK MODE & CONTROLS */
-/* ============================= */
-
-#toggleMode {
-    width: 100%;
-    margin-top: 15px;
-    background: #222;
-}
-
-#toggleMode:hover {
-    background: #111;
-}
-
-body.dark {
-    background: #111;
-}
-
-body.dark .container {
-    background: rgba(0, 0, 0, 0.6);
-}
-
-
-/* ============================= */
-/* FILTERS SECTION */
-/* ============================= */
+/* ========================================================================== */
+/* 9. FILTERS & EXTRA CONTROLS */
+/* ========================================================================== */
 
 .filters {
     margin-top: 15px;
@@ -375,7 +378,6 @@ body.dark .container {
     align-items: center;
     gap: 8px;
     width: 100%;
-    box-sizing: border-box;
 }
 
 .filters button {
@@ -395,11 +397,6 @@ body.dark .container {
     background: #ff4d4d;
     transform: scale(1.02);
 }
-
-
-/* ============================= */
-/* EXTRA SECTION */
-/* ============================= */
 
 .extra {
     margin-top: 12px;
@@ -424,9 +421,9 @@ body.dark .container {
 }
 
 
-/* ============================= */
-/* PRIORITY & TAGS */
-/* ============================= */
+/* ========================================================================== */
+/* 10. PRIORITY, TAGS & UNDO */
+/* ========================================================================== */
 
 .low { border-left: 5px solid #2ecc71; }
 .medium { border-left: 5px solid #f1c40f; }
@@ -480,10 +477,33 @@ body.dark .container {
 
 
 /* ========================================================================== */
-/* COMPREHENSIVE MEDIA QUERIES FOR ALL SCREEN SIZES */
+/* 11. DARK MODE STYLES */
 /* ========================================================================== */
 
-/* 1. ULTRA-WIDE SCREENS & 4K/8K TV / LCD / LED (Large Display Panels) */
+#toggleMode {
+    width: 100%;
+    margin-top: 15px;
+    background: #222;
+}
+
+#toggleMode:hover {
+    background: #111;
+}
+
+body.dark {
+    background: #111;
+}
+
+body.dark .container {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+
+/* ========================================================================== */
+/* 12. MEDIA QUERIES & RESPONSIVE BREAKPOINTS */
+/* ========================================================================== */
+
+/* Large Displays / 4K Screens (1400px+) */
 @media (min-width: 1400px) {
     .container {
         width: 1100px;
@@ -500,23 +520,41 @@ body.dark .container {
     }
 }
 
-/* 2. LAPTOP & DESKTOP (Standard Screens) */
+/* Laptops & Desktops (769px to 1399px) */
 @media (min-width: 769px) and (max-width: 1399px) {
     .container {
         width: min(1000px, 92vw);
     }
 }
 
-/* 3. TABLETS & SMALL LAPTOPS (iPad, Android Tabs) */
+/* Tablets & Mobile Screens (<= 768px) */
 @media (max-width: 768px) {
+    html {
+        overflow-y: auto !important;
+        height: auto;
+    }
+
     body {
-        padding: 12px;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding: 15px 10px 30px 10px;
+        min-height: 100vh;
+        height: auto;
     }
 
     .container {
         width: 100%;
-        max-height: 94vh;
-        padding: 20px;
+        height: auto !important;
+        max-height: none !important;
+        overflow: visible !important;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        box-shadow: none;
+        padding: 0;
     }
 
     .main-layout {
@@ -524,20 +562,94 @@ body.dark .container {
         gap: 18px;
     }
 
-    #taskList {
-        max-height: 220px;
+    .desktop-only-title {
+        display: none;
+    }
+
+    .mobile-only-title {
+        display: block;
+        text-align: center;
+        margin: 10px 0 15px 0;
+        color: #cf3636;
+        font-size: 26px;
+        z-index: 2;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Sub-cards styling on mobile */
+    .sub-card {
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 15px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    body.dark .sub-card {
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+    /* Left Panel Mobile Adjustments */
+    .left-panel.sub-card {
+        padding: 16px 12px;
+    }
+
+    .left-panel .input-group {
+        gap: 10px;
+    }
+
+    .left-panel input, 
+    .left-panel select {
+        padding: 10px;
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    .left-panel #addBtn {
+        padding: 11px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-top: 4px;
+    }
+
+    /* Right Panel Mobile Adjustments */
+    .right-panel.sub-card {
+        padding: 16px 12px;
+    }
+
+    .right-panel #searchInput {
+        padding: 10px;
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .right-panel #taskList {
+        max-height: 280px;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 2px;
+    }
+
+    .right-panel li {
+        padding: 8px 10px;
+        font-size: 13px;
+        gap: 6px;
+        margin-top: 8px;
+    }
+
+    .right-panel li button {
+        padding: 5px 8px;
+        font-size: 11px;
     }
 }
 
-/* 4. MOBILE SCREENS (Smartphones, Small Displays) */
+/* Small Mobile Screens (<= 500px) */
 @media (max-width: 500px) {
     body {
         padding: 8px;
-    }
-
-    .container {
-        padding: 16px 12px;
-        border-radius: 16px;
     }
 
     h1 {
@@ -554,6 +666,11 @@ body.dark .container {
     .field label {
         min-width: auto;
         font-size: 13px;
+    }
+
+    .date-category-wrapper {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 
     .filters {
@@ -579,332 +696,18 @@ body.dark .container {
     }
 }
 
-/* 5. EXTRA SMALL / FOLDABLE MOBILE SCREENS (e.g., Galaxy Fold outer screen, 320px) */
+/* Ultra Small / Foldable Devices (<= 360px) */
 @media (max-width: 360px) {
     .container {
         padding: 10px 8px;
     }
 
     .filters button {
-        flex: 1 1 100%; /* Stacks filter buttons vertically on tiny screens */
+        flex: 1 1 100%;
     }
 
     input, select, button {
         padding: 8px;
         font-size: 12px;
-    }
-}
-/* ============================= */
-/* TITLE VISIBILITY CONTROL */
-/* ============================= */
-
-/* Normal (Desktop/Badi screens) par Card ke bahar wala Title Hide rahega */
-.mobile-only-title {
-    display: none;
-}
-
-/* Card ke andar wala Title general styling */
-.desktop-only-title {
-    display: block;
-    text-align: center;
-    margin: 0 0 25px 0;
-    color: #cf3636;
-}
-
-/* ============================= */
-/* MOBILE & SMALL SCREENS (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    /* Body flex-direction ko column karein taake heading card ke uper aaye */
-    body {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Card ke andar wale Title ko hide karein */
-    .desktop-only-title {
-        display: none;
-    }
-
-    /* Card ke bahar wale Title ko display karein */
-    .mobile-only-title {
-        display: block;
-        text-align: center;
-        margin-bottom: 15px;
-        color: #cf3636;
-        font-size: 26px;
-        z-index: 2; /* Ensure it stays above background */
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-}
-/* ============================= */
-/* DATE + CATEGORY GRID FIX */
-/* ============================= */
-
-/* Mobile & Desktop Dono ke liye base wrapper */
-.date-category-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)); /* Desktop/Big screens par side-by-side 2 equal columns */
-    gap: 12px;
-    width: 100%;
-    margin-top: 5px;
-    box-sizing: border-box;
-}
-
-/* Date aur Category Groups */
-.due-date-group,
-.category-group {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 6px;
-    width: 100%;
-    color: white;
-}
-
-#dueDate,
-#category {
-    width: 100%;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid #eee;
-    outline: none;
-    box-sizing: border-box;
-    font-size: 14px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #333;
-    transition: 0.3s;
-}
-
-#dueDate:focus,
-#category:focus {
-    border-color: #667eea;
-}
-
-
-/* ============================= */
-/* SMALL SCREENS FIX (<= 500px) */
-/* ============================= */
-
-@media (max-width: 500px) {
-    /* Chhoti screens par Date aur Category ek dusre ke niche aa jayenge */
-    .date-category-wrapper {
-        grid-template-columns: 1fr;
-        gap: 10px;
-    }
-}
-/* ============================= */
-/* TITLE VISIBILITY CONTROL */
-/* ============================= */
-
-.mobile-only-title {
-    display: none;
-}
-
-.desktop-only-title {
-    display: block;
-    text-align: center;
-    margin: 0 0 25px 0;
-    color: #cf3636;
-}
-
-
-/* ============================= */
-/* DESKTOP / BIG SCREENS DEFAULT */
-/* ============================= */
-
-.container {
-    width: min(100%, 1050px);
-    max-height: 92vh;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    color: #fff;
-    padding: 28px;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.12);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    box-sizing: border-box;
-}
-
-/* ============================= */
-/* SMALL SCREENS ONLY (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    body {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        overflow-y: auto; /* Small screens par body scroll enable */
-        padding: 15px 10px;
-    }
-
-    /* Main Container background desktop style se remove kar ke cards par shift kar diya */
-    .container {
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        box-shadow: none;
-        padding: 0;
-        width: 100%;
-        max-height: none;
-        overflow-y: visible;
-    }
-
-    .desktop-only-title {
-        display: none;
-    }
-
-    .mobile-only-title {
-        display: block;
-        text-align: center;
-        margin: 10px 0 15px 0;
-        color: #cf3636;
-        font-size: 26px;
-        z-index: 2;
-    }
-
-    /* 3 SEPARATE CARDS STYLING FOR MOBILE */
-    .sub-card {
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-radius: 16px;
-        padding: 18px;
-        margin-bottom: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-sizing: border-box;
-    }
-
-    /* Dark Mode Support for Sub Cards */
-    body.dark .sub-card {
-        background: rgba(0, 0, 0, 0.6);
-    }
-}
-/* ============================= */
-/* NO SCROLLBAR BUT TOUCH SCROLL ENABLER */
-/* ============================= */
-
-/* Pure Webpage se visual Scrollbar hide karne ke liye */
-html::-webkit-scrollbar,
-body::-webkit-scrollbar,
-.container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-}
-
-html, body, .container {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-
-/* ============================= */
-/* SMALL SCREENS SCROLL FIX (<= 768px) */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    html {
-        overflow-y: auto !important; /* Touch scroll allow karega */
-        height: auto;
-    }
-
-    body {
-        min-height: 100vh;
-        height: auto;
-        overflow-y: auto !important; /* Vertical scroll enable */
-        -webkit-overflow-scrolling: touch; /* iOS / Android smooth touch scrolling */
-        padding: 15px 10px 30px 10px; /* Extra bottom space for comfortable scroll */
-    }
-
-    /* Outer Container ki height restriction khatam taake 3 cards natural height le sakein */
-    .container {
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
-    }
-
-    /* Task List ke andar agar lambi list ho to uski scrollbar bhi hide rahegi */
-    #taskList::-webkit-scrollbar {
-        display: none;
-    }
-    
-    #taskList {
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-}
-/* ============================= */
-/* MOBILE SPECIFIC CARD ADJUSTMENTS */
-/* ============================= */
-
-@media (max-width: 768px) {
-
-    /* CARD 1: INPUT FORM ADJUSTMENTS */
-    .left-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .left-panel .input-group {
-        gap: 10px;
-    }
-
-    .left-panel input, 
-    .left-panel select {
-        padding: 10px;
-        font-size: 13px;
-        border-radius: 8px;
-    }
-
-    .left-panel .date-category-wrapper {
-        grid-template-columns: 1fr; /* Mobile par Date aur Category vertical block mein clean align honge */
-        gap: 8px;
-    }
-
-    .left-panel #addBtn {
-        padding: 11px;
-        font-size: 14px;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-
-
-    /* CARD 2: SEARCH & TASK LIST ADJUSTMENTS */
-    .right-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .right-panel #searchInput {
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .right-panel #taskList {
-        max-height: 280px; /* Touch scroll ke saath list aasani se render hogi */
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch; /* Smooth iOS/Android finger scroll */
-        padding-right: 2px;
-    }
-
-    /* Task list items Mobile styling */
-    .right-panel li {
-        padding: 8px 10px;
-        font-size: 13px;
-        gap:6px;
-        margin-top: 8px;
-    }
-
-    .right-panel li button {
-        padding: 5px 8px;
-        font-size: 11px;
     }
 }
