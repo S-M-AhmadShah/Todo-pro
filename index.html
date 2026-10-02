@@ -14,7 +14,7 @@
         <source src="background.mp4" type="video/mp4">
     </video>
 
-    <!-- MOBILE HEADING (Card ke bahar) -->
+    <!-- MOBILE HEADING -->
     <h1 class="main-title mobile-only-title">Todo Pro 🚀</h1>
 
     <!-- MAIN APP CONTAINER -->
@@ -26,16 +26,23 @@
         <!-- MAIN LAYOUT -->
         <div class="main-layout">
 
-            <!-- CARD 1: INPUT FORM (Task, Priority, Date, Category, Add Button) -->
+            <!-- CARD 1: INPUT FORM -->
             <div class="left-panel sub-card">
+
                 <div class="input-group">
+
                     <div class="field">
-                        <input type="text" id="taskInput" placeholder="Add a new task...">
+                        <input
+                            type="text"
+                            id="taskInput"
+                            placeholder="Add a new task..."
+                            autocomplete="off"
+                        >
                     </div>
 
                     <div class="field priority-field">
                         <select id="priority">
-                            <option value="" disabled selected>Select Priority</option>
+                            <option value="" selected>Select Priority</option>
                             <option value="low">Low</option>
                             <option value="medium">Medium</option>
                             <option value="high">High</option>
@@ -43,6 +50,7 @@
                     </div>
 
                     <div class="date-category-wrapper">
+
                         <div class="due-date-group">
                             <input type="date" id="dueDate">
                         </div>
@@ -55,39 +63,72 @@
                                 <option value="important">⭐ Important</option>
                             </select>
                         </div>
+
                     </div>
 
                     <button id="addBtn" type="button">Add</button>
+
                 </div>
             </div>
 
             <!-- CARD 2: SEARCH & TASK LIST -->
             <div class="right-panel sub-card">
-                <input type="text" id="searchInput" placeholder="Search task...">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search task..."
+                    autocomplete="off"
+                >
+
                 <ul id="taskList"></ul>
-                <p id="emptyMessage">📝 No tasks found. Add a new task to get started!</p>
+
+                <p id="emptyMessage">
+                    📝 No tasks found. Add a new task to get started!
+                </p>
+
             </div>
 
         </div>
 
-        <!-- CARD 3: CONTROLS & FILTERS (Dark Mode, Filters, Extra Info) -->
+        <!-- CARD 3: CONTROLS -->
         <div class="bottom-controls-card sub-card">
+
             <!-- DARK MODE -->
-            <button id="toggleMode" type="button">🌙 Dark Mode</button>
+            <button id="toggleMode" type="button">
+                🌙 Dark Mode
+            </button>
 
             <!-- FILTERS -->
             <div class="filters">
+
                 <button id="allBtn" type="button">All</button>
-                <button id="activeBtn" type="button">Active</button>
-                <button id="completedBtn" type="button">Completed</button>
-                <button id="favoritesBtn" type="button">⭐ Favorites</button>
+
+                <button id="activeBtn" type="button">
+                    Active
+                </button>
+
+                <button id="completedBtn" type="button">
+                    Completed
+                </button>
+
+                <button id="favoritesBtn" type="button">
+                    ⭐ Favorites
+                </button>
+
             </div>
 
             <!-- EXTRA -->
             <div class="extra">
+
                 <span id="taskCount">0 tasks</span>
-                <button id="clearCompleted" type="button">Clear Completed</button>
+
+                <button id="clearCompleted" type="button">
+                    Clear Completed
+                </button>
+
             </div>
+
         </div>
 
     </div>
