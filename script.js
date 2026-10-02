@@ -1,4 +1,3 @@
-```javascript
 /* ============================= */
 /* ELEMENTS */
 /* ============================= */
@@ -931,4 +930,3 @@ function showUndo(deletedTask, originalIndex) {
 /* ============================= */
 
 renderTasks("all");
-```
