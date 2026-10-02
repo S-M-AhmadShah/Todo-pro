@@ -1,5 +1,5 @@
 /* ========================================================================== */
-/* 1. GLOBAL RESET & BASE STYLES */
+/* 1. GLOBAL RESET & BASE STYLES                                              */
 /* ========================================================================== */
 
 * {
@@ -24,7 +24,7 @@ body {
     padding: 20px;
 }
 
-/* Hide scrollbars visually while maintaining full touch/mouse scrollability */
+/* Scrollbar isolation */
 html::-webkit-scrollbar,
 body::-webkit-scrollbar,
 .container::-webkit-scrollbar,
@@ -39,7 +39,7 @@ html, body, .container, #taskList {
 
 
 /* ========================================================================== */
-/* 2. BACKGROUND VIDEO & OVERLAY (DESKTOP CLICK FIX) */
+/* 2. BACKGROUND & OVERLAY FIX (INTERCEPT PREVENTION)                         */
 /* ========================================================================== */
 
 #bgVideo {
@@ -49,8 +49,8 @@ html, body, .container, #taskList {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
-    pointer-events: none !important; /* Fix: Background video won't intercept clicks */
+    z-index: -2 !important;
+    pointer-events: none !important;
 }
 
 body::before {
@@ -58,13 +58,13 @@ body::before {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.35);
-    z-index: 0;
-    pointer-events: none !important; /* Fix: Backdrop layer won't block desktop clicks */
+    z-index: -1 !important;
+    pointer-events: none !important;
 }
 
 
 /* ========================================================================== */
-/* 3. MAIN CARD CONTAINER (DESKTOP DEFAULT) */
+/* 3. MAIN CARD CONTAINER                                                     */
 /* ========================================================================== */
 
 .container {
@@ -77,7 +77,8 @@ body::before {
     padding: clamp(16px, 3vw, 28px);
     border-radius: 20px;
     position: relative;
-    z-index: 10; /* Elevated z-index to stay above background layers */
+    z-index: 10 !important;
+    pointer-events: auto !important;
 
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(15px);
@@ -88,7 +89,7 @@ body::before {
 
 
 /* ========================================================================== */
-/* 4. TITLES & HEADINGS */
+/* 4. TITLES & HEADINGS                                                       */
 /* ========================================================================== */
 
 h1 {
@@ -111,7 +112,7 @@ h1 {
 
 
 /* ========================================================================== */
-/* 5. MAIN LAYOUT (PANELS) */
+/* 5. MAIN LAYOUT                                                             */
 /* ========================================================================== */
 
 .main-layout {
@@ -120,17 +121,21 @@ h1 {
     gap: 25px;
     align-items: start;
     width: 100%;
+    position: relative;
+    z-index: 11 !important;
 }
 
 .left-panel,
 .right-panel {
     min-width: 0;
     width: 100%;
+    position: relative;
+    z-index: 12 !important;
 }
 
 
 /* ========================================================================== */
-/* 6. FORM INPUTS & GROUPS */
+/* 6. FORM INPUTS & INTERACTIVE ELEMENTS                                      */
 /* ========================================================================== */
 
 .input-group {
@@ -164,8 +169,9 @@ select {
     box-sizing: border-box;
     font-size: 14px;
     position: relative;
-    z-index: 12;
+    z-index: 20 !important;
     pointer-events: auto !important;
+    touch-action: manipulation;
 }
 
 select {
@@ -177,13 +183,6 @@ select:focus {
     border-color: #667eea;
 }
 
-.input-group .field:first-child input,
-.priority-field select {
-    flex: 1;
-    width: 100%;
-}
-
-/* Date + Category Grid Wrapper */
 .date-category-wrapper {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -202,11 +201,6 @@ select:focus {
     color: white;
 }
 
-.due-date-group label,
-.category-group label {
-    font-size: 14px;
-}
-
 #dueDate,
 #category {
     width: 100%;
@@ -217,17 +211,11 @@ select:focus {
     font-size: 14px;
     background: rgba(255, 255, 255, 0.9);
     color: #333;
-    transition: 0.3s;
-}
-
-#dueDate:focus,
-#category:focus {
-    border-color: #667eea;
 }
 
 
 /* ========================================================================== */
-/* 7. BUTTONS (CLICK PRIORITY ENABLED) */
+/* 7. BUTTON STYLES & CLICK ROUTING                                           */
 /* ========================================================================== */
 
 button {
@@ -240,8 +228,10 @@ button {
     transition: 0.3s;
     font-size: 14px;
     position: relative;
-    z-index: 12; /* High layer priority */
-    pointer-events: auto !important; /* Forces hover & click functionality */
+    z-index: 25 !important;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 button:hover {
@@ -249,14 +239,31 @@ button:hover {
     transform: translateY(-1px);
 }
 
+button:active {
+    transform: scale(0.98);
+}
+
 #addBtn {
     width: 100%;
     margin-top: 3px;
 }
 
+#toggleMode {
+    width: 100%;
+    margin-top: 15px;
+    background: #222;
+    position: relative;
+    z-index: 25 !important;
+    pointer-events: auto !important;
+}
+
+#toggleMode:hover {
+    background: #111;
+}
+
 
 /* ========================================================================== */
-/* 8. SEARCH & TASK LIST */
+/* 8. SEARCH & TASK LIST                                                      */
 /* ========================================================================== */
 
 #searchInput {
@@ -271,10 +278,9 @@ button:hover {
     max-height: clamp(200px, 35vh, 320px);
     overflow-y: auto;
     position: relative;
-    z-index: 11;
+    z-index: 15 !important;
 }
 
-/* Task Item */
 li {
     display: flex;
     align-items: center;
@@ -287,23 +293,14 @@ li {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255, 255, 255, 0.18);
-    transition: 0.3s;
     position: relative;
-    z-index: 11;
-}
-
-li:hover {
-    background: linear-gradient(135deg, #774ba2, #667eea);
+    z-index: 16 !important;
 }
 
 li span {
     flex: 1;
     min-width: 0;
     word-break: break-word;
-    overflow-wrap: anywhere;
-    max-height: 80px;
-    overflow-y: auto;
-    cursor: pointer;
 }
 
 li input[type="checkbox"] {
@@ -314,29 +311,13 @@ li input[type="checkbox"] {
     border-radius: 50%;
     cursor: pointer;
     position: relative;
-    z-index: 13;
+    z-index: 30 !important;
     pointer-events: auto !important;
-    transition: 0.3s;
     flex-shrink: 0;
 }
 
 li input[type="checkbox"]:checked {
     background: #667eea;
-    transform: scale(1.1);
-}
-
-li input[type="checkbox"]:checked::after {
-    content: "✔";
-    color: white;
-    position: absolute;
-    top: 2px;
-    left: 6px;
-    font-size: 14px;
-}
-
-.completed span {
-    text-decoration: line-through;
-    opacity: 0.6;
 }
 
 li button {
@@ -346,42 +327,9 @@ li button {
     margin-left: auto;
 }
 
-li button:last-child {
-    background: #777;
-}
-
-li button:last-child:hover {
-    background: #555;
-}
-
-li button:first-of-type {
-    background: #ff4d4d;
-}
-
-li button:first-of-type:hover {
-    background: #e60000;
-}
-
-li input[type="text"] {
-    padding: 6px;
-    border-radius: 6px;
-    border: none;
-    outline: none;
-    min-width: 0;
-}
-
-#emptyMessage {
-    text-align: center;
-    padding: 20px 10px;
-    color: white;
-    opacity: 0.8;
-    font-size: 14px;
-    display: none;
-}
-
 
 /* ========================================================================== */
-/* 9. FILTERS & EXTRA CONTROLS */
+/* 9. FILTERS & EXTRA CONTROLS                                                */
 /* ========================================================================== */
 
 .filters {
@@ -397,18 +345,6 @@ li input[type="text"] {
     flex: 1;
     padding: 10px 6px;
     font-size: 13px;
-    opacity: 0.85;
-    text-align: center;
-    white-space: nowrap;
-}
-
-.filters button:hover {
-    opacity: 1;
-}
-
-.filters button.active {
-    background: #ff4d4d;
-    transform: scale(1.02);
 }
 
 .extra {
@@ -418,92 +354,10 @@ li input[type="text"] {
     align-items: center;
 }
 
-#taskCount {
-    font-size: 13px;
-    opacity: 0.8;
-}
-
-#clearCompleted {
-    background: #ff9f43;
-    padding: 6px 10px;
-    font-size: 12px;
-}
-
-#clearCompleted:hover {
-    background: #ff7f00;
-}
-
 
 /* ========================================================================== */
-/* 10. PRIORITY, TAGS & UNDO */
+/* 10. DARK MODE OVERRIDES                                                    */
 /* ========================================================================== */
-
-.low { border-left: 5px solid #2ecc71; }
-.medium { border-left: 5px solid #f1c40f; }
-.high { border-left: 5px solid #e74c3c; }
-
-.due-date {
-    font-size: 11px;
-    white-space: nowrap;
-    opacity: 0.85;
-}
-
-.due-date.overdue { color: #ff4d4d; font-weight: bold; }
-.due-date.today { color: #00ff88; font-weight: bold; }
-.due-date.upcoming { color: #ffd43b; font-weight: bold; }
-
-.category-tag {
-    font-size: 11px;
-    padding: 3px 7px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.15);
-    white-space: nowrap;
-}
-
-.undo-box {
-    margin-top: 15px;
-    padding: 10px;
-    background: #222;
-    color: white;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    position: relative;
-    z-index: 20;
-}
-
-.undo-box button { background: #2ecc71; padding: 6px 10px; }
-.undo-box button:hover { background: #27ae60; }
-
-.favorite-btn {
-    background: transparent !important;
-    font-size: 18px;
-    padding: 4px 6px;
-    border: none;
-    cursor: pointer;
-}
-
-.favorite-btn:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
-    transform: scale(1.15);
-}
-
-
-/* ========================================================================== */
-/* 11. DARK MODE STYLES */
-/* ========================================================================== */
-
-#toggleMode {
-    width: 100%;
-    margin-top: 15px;
-    background: #222;
-}
-
-#toggleMode:hover {
-    background: #111;
-}
 
 body.dark {
     background: #111;
@@ -515,46 +369,11 @@ body.dark .container {
 
 
 /* ========================================================================== */
-/* 12. MEDIA QUERIES & RESPONSIVE BREAKPOINTS */
+/* 11. RESPONSIVE BREAKPOINTS                                                 */
 /* ========================================================================== */
 
-/* Large Displays / 4K Screens (1400px+) */
-@media (min-width: 1400px) {
-    .container {
-        width: 1100px;
-        padding: 32px;
-    }
-
-    h1 {
-        font-size: 34px;
-    }
-
-    input, select, button {
-        font-size: 15px;
-        padding: 13px;
-    }
-}
-
-/* Laptops & Desktops (769px to 1399px) */
-@media (min-width: 769px) and (max-width: 1399px) {
-    .container {
-        width: min(1000px, 92vw);
-    }
-}
-
-/* Tablets & Mobile Screens (<= 768px) */
 @media (max-width: 768px) {
-    html {
-        overflow-y: auto !important;
-        height: auto;
-    }
-
     body {
-        flex-direction: column;
-        justify-content: flex-start;
-        align-items: center;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch;
         padding: 15px 10px 30px 10px;
         min-height: 100vh;
         height: auto;
@@ -562,12 +381,10 @@ body.dark .container {
 
     .container {
         width: 100%;
-        height: auto !important;
         max-height: none !important;
         overflow: visible !important;
         background: transparent;
         backdrop-filter: none;
-        -webkit-backdrop-filter: none;
         box-shadow: none;
         padding: 0;
     }
@@ -577,21 +394,6 @@ body.dark .container {
         gap: 18px;
     }
 
-    .desktop-only-title {
-        display: none;
-    }
-
-    .mobile-only-title {
-        display: block;
-        text-align: center;
-        margin: 10px 0 15px 0;
-        color: #cf3636;
-        font-size: 26px;
-        z-index: 2;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Sub-cards styling on mobile */
     .sub-card {
         background: rgba(255, 255, 255, 0.12);
         backdrop-filter: blur(15px);
@@ -599,130 +401,8 @@ body.dark .container {
         border-radius: 16px;
         padding: 18px;
         margin-bottom: 15px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-    }
-
-    body.dark .sub-card {
-        background: rgba(0, 0, 0, 0.6);
-    }
-
-    /* Left Panel Mobile Adjustments */
-    .left-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .left-panel .input-group {
-        gap: 10px;
-    }
-
-    .left-panel input, 
-    .left-panel select {
-        padding: 10px;
-        font-size: 13px;
-        border-radius: 8px;
-    }
-
-    .left-panel #addBtn {
-        padding: 11px;
-        font-size: 14px;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-
-    /* Right Panel Mobile Adjustments */
-    .right-panel.sub-card {
-        padding: 16px 12px;
-    }
-
-    .right-panel #searchInput {
-        padding: 10px;
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
-
-    .right-panel #taskList {
-        max-height: 280px;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-right: 2px;
-    }
-
-    .right-panel li {
-        padding: 8px 10px;
-        font-size: 13px;
-        gap: 6px;
-        margin-top: 8px;
-    }
-
-    .right-panel li button {
-        padding: 5px 8px;
-        font-size: 11px;
-    }
-}
-
-/* Small Mobile Screens (<= 500px) */
-@media (max-width: 500px) {
-    body {
-        padding: 8px;
-    }
-
-    h1 {
-        font-size: 22px;
-        margin-bottom: 15px;
-    }
-
-    .field {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 4px;
-    }
-
-    .field label {
-        min-width: auto;
-        font-size: 13px;
-    }
-
-    .date-category-wrapper {
-        grid-template-columns: 1fr;
-        gap: 8px;
-    }
-
-    .filters {
-        flex-wrap: wrap;
-        gap: 6px;
-    }
-
-    .filters button {
-        flex: 1 1 45%;
-        padding: 9px 4px;
-        font-size: 12px;
-    }
-
-    .extra {
-        flex-direction: column;
-        gap: 10px;
-        align-items: stretch;
-        text-align: center;
-    }
-
-    #clearCompleted {
-        width: 100%;
-    }
-}
-
-/* Ultra Small / Foldable Devices (<= 360px) */
-@media (max-width: 360px) {
-    .container {
-        padding: 10px 8px;
-    }
-
-    .filters button {
-        flex: 1 1 100%;
-    }
-
-    input, select, button {
-        padding: 8px;
-        font-size: 12px;
+        position: relative;
+        z-index: 15 !important;
+        pointer-events: auto !important;
     }
 }
